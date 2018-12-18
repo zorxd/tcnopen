@@ -613,8 +613,10 @@ EXT_DECL VOS_ERR_T vos_sockSetOptions (
         }
         if (pOptions->qos > 0 && pOptions->qos < 8)
         {
-            /* The QoS value (0-7) is mapped to MSB bits 7-5, bit 2 is set for local use */
-            sockOptValue = (int) ((pOptions->qos << 5) | 4);
+            /*According to IEC 61375-3-4: Ethernet Consist Network (ECN) 4.6.3 Assignment of priority level
+            The binary representation of DSCP field shall be as follows.
+            LLL000*/
+            sockOptValue = (int) (pOptions->qos << 5);
             if (setsockopt(sock, IPPROTO_IP, IP_TOS, (char *)&sockOptValue,
                            sizeof(sockOptValue)) == -1)
             {
