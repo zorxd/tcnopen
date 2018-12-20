@@ -46,7 +46,8 @@
  *  LOCALS
  */
 
-const CHAR8 *cDefaultIface = "fec";
+const UINT8 cDefaultIfaceMaxLen = 16;
+CHAR8 cDefaultIface[16] = {0};
 
 BOOL8 vosSockInitialised = FALSE;
 
@@ -389,6 +390,10 @@ EXT_DECL BOOL8 vos_netIfUp(
 EXT_DECL VOS_ERR_T vos_sockInit (void)
 {
     memset(&gIfr, 0, sizeof(gIfr));
+    if (strlen(cDefaultIface) == 0)
+    {
+        snprintf(cDefaultIface, cDefaultIfaceMaxLen, "fec");
+    }
     vosSockInitialised = TRUE;
 
     return VOS_NO_ERR;
@@ -1497,4 +1502,25 @@ EXT_DECL VOS_IP4_ADDR_T vos_determineBindAddr( VOS_IP4_ADDR_T   srcIP,
     {
         return srcIP;
     }
+}
+
+/**********************************************************************************************************************/
+/** Sets the name of the interface
+ *  @param[in]      iFaceName       name of interface which shall be used by TRDP stack
+ *
+ *  @retval             VOS_NO_ERR
+ *                      VOS_LEN_ERR
+ *                      VOS_NOT_SUPPORTED
+ */
+EXT_DECL VOS_ERR_T vos_setIfaceName ( CHAR8 *iFaceName )
+{
+    if (strlen(iFaceName) < cDefaultIfaceMaxLen)
+    {
+        strcpy(cDefaultIface, iFaceName);
+    }
+    else
+    {
+        return VOS_LEN_ERR;
+    }
+    return VOS_NO_ERR;
 }

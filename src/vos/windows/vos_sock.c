@@ -1668,3 +1668,16 @@ EXT_DECL VOS_IP4_ADDR_T vos_determineBindAddr ( VOS_IP4_ADDR_T  srcIP,
 {
     return srcIP;
 }
+
+/**********************************************************************************************************************/
+/** Sets the name of the interface
+ *  @param[in]      iFaceName       name of interface which shall be used by TRDP stack
+ *
+ *  @retval             VOS_NO_ERR
+ *                      VOS_LEN_ERR
+ *                      VOS_NOT_SUPPORTED
+ */
+EXT_DECL VOS_ERR_T vos_setIfaceName ( CHAR8 *iFaceName )
+{
+    return VOS_NOT_SUPPORTED;
+}
