@@ -340,7 +340,11 @@ EXT_DECL void vos_getTime (
     else
     {
         /*lint -e(534) ignore return value */
+#ifdef CLOCK_MONOTONIC
+        clock_gettime(CLOCK_MONOTONIC, &myTime);
+#else
         clock_gettime(CLOCK_REALTIME, &myTime);
+#endif
         pTime->tv_sec   = (UINT32) myTime.tv_sec;
         pTime->tv_usec  = (INT32) (myTime.tv_nsec / VOS_NSECS_PER_USEC);
     }
