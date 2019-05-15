@@ -188,8 +188,8 @@ static void ttiPDCallback (
                 (void) tlc_setETBTopoCount(appHandle, vos_ntohl(pTelegram->etbTopoCnt));
             }
 
-            memcpy(&appHandle->pTTDB->opTrnState, &pTelegram->state,
-                   (sizeof(TRDP_OP_TRAIN_DIR_STATE_T) < dataSize) ? sizeof(TRDP_OP_TRAIN_DIR_STATE_T) : dataSize);
+            memcpy(&appHandle->pTTDB->opTrnState, pTelegram,
+                   (sizeof(TRDP_OP_TRAIN_DIR_STATUS_INFO_T) < dataSize) ? sizeof(TRDP_OP_TRAIN_DIR_STATUS_INFO_T) : dataSize);
 
             /* unmarshall manually:   */
             appHandle->pTTDB->opTrnState.state.opTrnTopoCnt = vos_ntohl(pTelegram->state.opTrnTopoCnt);
