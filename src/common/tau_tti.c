@@ -633,7 +633,24 @@ EXT_DECL TRDP_ERR_T tau_initTTIaccess (
         return TRDP_INIT_ERR;
     }
 
-    /*  Listen for MD 101 */
+
+    /*  Listen for MD 101 on  TTDB_OP_DIR_INFO_IP_ETB0 (239.194.0.0) */
+
+    if (tlm_addListener(appHandle,
+                        &appHandle->pTTDB->md101Listener,
+                        userAction,
+                        ttiMDCallback,
+                        TTDB_OP_DIR_INFO_COMID,
+                        0,
+                        0,
+                        vos_dottedIP(TTDB_OP_DIR_INFO_IP_ETB0),
+                        TRDP_FLAGS_CALLBACK, NULL) != TRDP_NO_ERR)
+    {
+        vos_memFree(appHandle->pTTDB);
+        return TRDP_INIT_ERR;
+    }
+
+    /*  Listen for MD 101 on  TTDB_OP_DIR_INFO_IP (239.255.0.0) */
 
     if (tlm_addListener(appHandle,
                         &appHandle->pTTDB->md101Listener,
