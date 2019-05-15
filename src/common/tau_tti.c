@@ -1305,3 +1305,39 @@ EXT_DECL TRDP_ERR_T tau_getVehOrient (
     }
     return TRDP_NO_ERR;
 }
+
+/**********************************************************************************************************************/
+/** Get own operational consist number.
+ *
+ *
+ *  @param[in]      appHandle           The handle returned by tlc_init
+ *
+ *  @retval         ownOpCstNo          own operational consist number value
+ */
+EXT_DECL UINT8 tlc_getOwnOpCstNo (
+    TRDP_APP_SESSION_T appHandle)
+{
+    if (trdp_isValidSession(appHandle))
+    {
+        return appHandle->pTTDB->opTrnState.ownOpCstNo;    //pTTDB opTrnState ownOpCstNo;
+    }
+    return 0;
+}
+
+/**********************************************************************************************************************/
+/** Get own train consist number.
+ *
+ *
+ *  @param[in]      appHandle           The handle returned by tlc_init
+ *
+ *  @retval         ownTrnCstNo         own train consist number value
+ */
+EXT_DECL UINT8 tlc_getOwnTrnCstNo (
+    TRDP_APP_SESSION_T appHandle)
+{
+    if (trdp_isValidSession(appHandle))
+    {
+        return appHandle->pTTDB->opTrnState.ownTrnCstNo;
+    }
+    return 0;
+}

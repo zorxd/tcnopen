@@ -201,6 +201,12 @@ EXT_DECL TRDP_ERR_T tlc_setOpTrainTopoCount (
 EXT_DECL UINT32 tlc_getOpTrainTopoCount (
     TRDP_APP_SESSION_T  appHandle);
 
+EXT_DECL UINT8 tlc_getOwnOpCstNo (
+    TRDP_APP_SESSION_T appHandle);
+
+EXT_DECL UINT8 tlc_getOwnTrnCstNo (
+    TRDP_APP_SESSION_T appHandle);
+
 /**********************************************************************************************************************/
 /** Frees the buffer reserved by the TRDP layer.
  *
