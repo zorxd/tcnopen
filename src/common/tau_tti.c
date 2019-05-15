@@ -599,7 +599,24 @@ EXT_DECL TRDP_ERR_T tau_initTTIaccess (
         return TRDP_MEM_ERR;
     }
 
-    /*  subscribe to PD 100 */
+    /* subscribe to PD 100 on  TTDB_STATUS_DEST_IP (239.194.0.0) */
+
+    if (tlp_subscribe(appHandle,
+                      &appHandle->pTTDB->pd100SubHandle,
+                      userAction, ttiPDCallback,
+                      TRDP_TTDB_OP_TRAIN_DIR_STATUS_INFO_COMID,
+                      0, 0,
+                      VOS_INADDR_ANY,
+                      vos_dottedIP(TTDB_STATUS_DEST_IP_ETB0),
+                      TRDP_FLAGS_CALLBACK,
+                      TTDB_STATUS_TO * 1000,
+                      TRDP_TO_SET_TO_ZERO) != TRDP_NO_ERR)
+    {
+        vos_memFree(appHandle->pTTDB);
+        return TRDP_INIT_ERR;
+    }
+
+    /* subscribe to PD 100 on  TTDB_STATUS_DEST_IP (239.255.0.0) */
 
     if (tlp_subscribe(appHandle,
                       &appHandle->pTTDB->pd100SubHandle,
