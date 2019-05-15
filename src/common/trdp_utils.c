@@ -272,7 +272,8 @@ PD_ELE_T *trdp_queueFindSubAddr (
     {
         /*  We match if src/dst/mc address is zero or matches */
         if ((iterPD->addr.comId == addr->comId)
-            && ((iterPD->addr.srcIpAddr == 0) || (iterPD->addr.srcIpAddr == addr->srcIpAddr)))
+            && ((iterPD->addr.srcIpAddr == 0) || (iterPD->addr.srcIpAddr == addr->srcIpAddr))
+            && ((iterPD->addr.mcGroup == 0) || (iterPD->addr.mcGroup == addr->mcGroup)))
         {
             /*  We check for local communication
                 or if etbTopoCnt and opTrnTopoCnt of the subscription are zero or match */

@@ -429,6 +429,7 @@ TRDP_ERR_T  trdp_pdReceive (
     subAddresses.comId = vos_ntohl(pNewFrameHead->comId);
     subAddresses.etbTopoCnt = vos_ntohl(pNewFrameHead->etbTopoCnt);
     subAddresses.opTrnTopoCnt = vos_ntohl(pNewFrameHead->opTrnTopoCnt);
+    subAddresses.mcGroup = vos_isMulticast(subAddresses.destIpAddr) ? subAddresses.destIpAddr : 0;
 
     /*  It might be a PULL request      */
     if (vos_ntohs(pNewFrameHead->msgType) == (UINT16) TRDP_MSG_PR)
