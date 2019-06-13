@@ -2946,8 +2946,8 @@ TRDP_ERR_T tlm_reply (
                         appHandle,
                         (UINT8 *)pSessionId,
                         comId,
-                        (INT32)userStatus,
                         0,
+                        (INT32)userStatus,
                         pSendParam,
                         pData,
                         dataSize);
