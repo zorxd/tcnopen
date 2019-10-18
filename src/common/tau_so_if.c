@@ -20,6 +20,9 @@
 /*
 * $Id$
 *
+*      SB 2019-10-15: Added option for filtering requested services.
+*      SB 2019-10-02: Fixed bug with reply callback triggered after timeout with now invalid context.
+*      SB 2019-09-17: Fixed bug, with semaphores not valid during callback (including MR retries triggering cb).
 *      SB 2019-09-03: Removed unused selector element (SRM_UPD)
 *      BL 2019-09-02: Ticket #277 Bug in tau_so_if.c when not waiting for completion
 *      SB 2019-08-30: Fixed precompiler warnings for windows
@@ -148,6 +151,11 @@ static void soMDCallback (
         vos_printLog(VOS_LOG_WARNING, "ME received (comId %u)!\n", pMsg->comId);
         return;
     }
+    if (pMsg->msgType == TRDP_MSG_MR)
+    {
+        vos_printLog(VOS_LOG_WARNING, "Request timed out (comId %u)!\n", pMsg->comId);
+        return;
+    }
     if (pContext == NULL)
     {
         vos_printLog(VOS_LOG_ERROR, "Callback called without context pointer (comId %u)!\n", pMsg->comId);
@@ -239,6 +247,7 @@ static TRDP_ERR_T requestServices (
     UINT32          dataSize;
     TAU_CB_BLOCK_T  context = {NULL, NULL, 0u, TRDP_NO_ERR};
     void            *pContext = NULL;
+    TRDP_UUID_T     sessionId;
 
     if ((appHandle == NULL) ||
         (pServiceToAdd == NULL))
@@ -248,6 +257,8 @@ static TRDP_ERR_T requestServices (
 
     /* Compute the size of the data */;
     dataSize = sizeof(SRM_SERVICE_ENTRIES_T);
+
+    memset(&sessionId, 0u, sizeof(sessionId));
 
     {
         pPrivateBuffer = (SRM_SERVICE_ENTRIES_T *) vos_memAlloc(dataSize);
@@ -270,7 +281,7 @@ static TRDP_ERR_T requestServices (
     /* if we should wait for the reply, create a semaphore and pass it to the callback routine */
     if (waitForCompletion)
     {
-        VOS_ERR_T vos_err = vos_semaCreate(&context.waitForResponse, VOS_SEMA_FULL);
+        VOS_ERR_T vos_err = vos_semaCreate(&context.waitForResponse, VOS_SEMA_EMPTY);
         if (vos_err != VOS_NO_ERR)
         {
             err = TRDP_SEMA_ERR;
@@ -283,14 +294,14 @@ static TRDP_ERR_T requestServices (
     {
         case SRM_ADD:
             /* add data */
-            err = tlm_request(appHandle, pContext, soMDCallback, NULL,
+            err = tlm_request(appHandle, pContext, soMDCallback, &sessionId,
                               SRM_SERVICE_ADD_REQ_COMID, 0u,
                               0u, 0u, tau_ipFromURI(appHandle, SRM_SERVICE_ADD_REQ_URI), TRDP_FLAGS_CALLBACK, 1,
                               SRM_SERVICE_ADD_REQ_TO, NULL, (UINT8 *)context.pServiceEntry, dataSize, NULL, NULL);
             break;
         case SRM_DEL:
             /* request the deletion */
-            err = tlm_request(appHandle, pContext, soMDCallback, NULL,
+            err = tlm_request(appHandle, pContext, soMDCallback, &sessionId,
                               SRM_SERVICE_DEL_REQ_COMID, 0u,
                               0u, 0u, tau_ipFromURI(appHandle, SRM_SERVICE_DEL_REQ_URI), TRDP_FLAGS_CALLBACK, 1,
                               SRM_SERVICE_DEL_REQ_TO, NULL, (UINT8 *)context.pServiceEntry, dataSize, NULL, NULL);
@@ -322,6 +333,7 @@ cleanup:
 
     if (waitForCompletion)
     {
+        (void)tlm_abortSession(appHandle, &sessionId);
         vos_semaDelete(context.waitForResponse);
     }
     if (pPrivateBuffer != NULL)
@@ -419,6 +431,7 @@ EXT_DECL TRDP_ERR_T tau_updService (
  *  @param[in]          appHandle               Handle returned by tlc_openSession().
  *  @param[out]         ppServicesListBuffer    Pointer to pointer containing the list. Has to be vos_memfree'd by user
  *  @param[out]         pNoOfServices           Pointer to no. of services in returned list
+ *  @param[in]          pFilterEntry            Pointer to entry for filtering
  *
  *  @retval             TRDP_NO_ERR         no error
  *  @retval             TRDP_PARAM_ERR      Parameter error
@@ -429,10 +442,12 @@ EXT_DECL TRDP_ERR_T tau_updService (
 EXT_DECL TRDP_ERR_T tau_getServicesList (
     TRDP_APP_SESSION_T      appHandle,
     SRM_SERVICE_ENTRIES_T   * *ppServicesListBuffer,
-    UINT32                  *pNoOfServices)
+    UINT32                  *pNoOfServices,
+    SRM_SERVICE_ENTRIES_T   *pFilterEntry)
 {
     TRDP_ERR_T      err;
     TAU_CB_BLOCK_T  context = {0, NULL, 0u, TRDP_NO_ERR};
+    TRDP_UUID_T     sessionId;
 
     if ((appHandle == NULL) ||
         (ppServicesListBuffer == NULL))
@@ -440,7 +455,9 @@ EXT_DECL TRDP_ERR_T tau_getServicesList (
         return TRDP_PARAM_ERR;
     }
 
-    VOS_ERR_T vos_err = vos_semaCreate(&context.waitForResponse, VOS_SEMA_FULL);
+    memset(&sessionId, 0u, sizeof(sessionId));
+
+    VOS_ERR_T vos_err = vos_semaCreate(&context.waitForResponse, VOS_SEMA_EMPTY);
     if (vos_err != VOS_NO_ERR)
     {
         err = TRDP_SEMA_ERR;
@@ -448,10 +465,10 @@ EXT_DECL TRDP_ERR_T tau_getServicesList (
     }
 
     /* request the data now */
-    err = tlm_request(appHandle, &context, soMDCallback, NULL,
+    err = tlm_request(appHandle, &context, soMDCallback, &sessionId,
                       SRM_SERVICE_READ_REQ_COMID, 0u,
                       0u, 0u, tau_ipFromURI(appHandle, SRM_SERVICE_READ_REQ_URI), TRDP_FLAGS_CALLBACK, 1,
-                      SRM_SERVICE_READ_REQ_TO, NULL, NULL, 0u, NULL, NULL);
+                      SRM_SERVICE_READ_REQ_TO, NULL, (UINT8*) pFilterEntry, sizeof(SRM_SERVICE_ENTRIES_T), NULL, NULL);
 
     if (err == TRDP_NO_ERR)
     {
@@ -483,6 +500,7 @@ EXT_DECL TRDP_ERR_T tau_getServicesList (
 
 cleanup:
 
+    (void)tlm_abortSession(appHandle, &sessionId);
     vos_semaDelete(context.waitForResponse);
     return err;
 }
