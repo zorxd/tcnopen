@@ -47,7 +47,7 @@
 #define TRDP_EVOLUTION          0
 #endif
 
-#define TRDP_TIMER_GRANULARITY  10000                                   /**< granularity in us                      */
+#define TRDP_TIMER_GRANULARITY  1000                                   /**< granularity in us                      */
 #define TRDP_TIMER_FOREVER      0xffffffff                              /**< granularity in us                      */
 
 /*  Default MD communication parameters   */
@@ -67,7 +67,8 @@
 #define TRDP_PD_DEFAULT_SEND_PARAM  {TRDP_PD_DEFAULT_QOS, TRDP_PD_DEFAULT_TTL, 0}
 
 /*  Default TRDP process options    */
-#define TRDP_PROCESS_DEFAULT_CYCLE_TIME     10000                       /**< Default cycle time for TRDP process    */
+#define TRDP_PROCESS_DEFAULT_CYCLE_TIME     1000                       /**< Default cycle time for TRDP process    */
+
 #define TRDP_PROCESS_DEFAULT_PRIORITY       64                          /**< Default priority of TRDP process       */
 #define TRDP_PROCESS_DEFAULT_OPTIONS        TRDP_OPTION_TRAFFIC_SHAPING /**< Default options for TRDP process       */
 
