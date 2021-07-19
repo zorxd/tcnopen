@@ -26,5 +26,7 @@ DOXYPATH = /usr/local/bin/
 
 CFLAGS += -Wall -Wno-unknown-pragmas -Wno-format -fstrength-reduce -fno-builtin -fsigned-char
 CFLAGS += -pthread -fPIC -D_GNU_SOURCE -DPOSIX -mfloat-abi=hard
+CFLAGS +=  -DHAS_UUID
 
 LDFLAGS += -lrt -mfloat-abi=hard
+LDFLAGS += -luuid
