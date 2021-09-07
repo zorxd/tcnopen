@@ -56,6 +56,10 @@
 #include "trdp_types.h"
 #include "vos_thread.h"
 #include "vos_sock.h"
+#ifdef TRDPSEC
+#include "trdp_sec_types.h"
+#endif
+
 
 
 /***********************************************************************************************************************
@@ -66,8 +70,8 @@
 #ifndef TRDP_VERSION
 #define TRDP_VERSION    2
 #define TRDP_RELEASE    1
-#define TRDP_UPDATE     22
-#define TRDP_EVOLUTION  63              /* Evolution > 0 denotes trunk! */
+#define TRDP_UPDATE     0
+#define TRDP_EVOLUTION  0              /* Evolution > 0 denotes trunk! */
 #endif
 
 /* Version as a string, this can also be for example 1.2.3.4.RC1 */
@@ -310,6 +314,19 @@ typedef struct hp_slots TRDP_HP_SLOTS_T;        /**< forward declaration        
 #pragma pack(pop)
 #endif
 
+#ifdef TRDPSEC
+/** Queue element for secure sessions    */
+typedef struct TRDPSEC_SECURE_SESSION
+{
+	struct TRDPSEC_SECURE_SESSION  		*pNext;
+	UINT32								addr;
+	TRDPSEC_SECRET_SESSEION_STATUS_T	sessionStatus;
+	UINT32								flags;
+	CHAR8								sharedSecret[TRDPSEC_SECRET_LENGTH];
+	CHAR8								privateKey[TRDPSEC_PRIVATE_KEY_LENGTH];
+}TRDPSEC_SECURE_SESSION_T;
+#endif
+
 /** Queue element for PD packets to send or receive    */
 typedef struct PD_ELE
 {
@@ -341,6 +358,11 @@ typedef struct PD_ELE
     const void          *pUserRef;              /**< from subscribe()                                       */
     TRDP_PD_CALLBACK_T  pfCbFunction;           /**< Pointer to PD callback function                        */
     PD_PACKET_T         *pFrame;                /**< header ... data + FCS...                               */
+#ifdef TRDPSEC
+    BOOL8						mustBeSecure;
+    TRDPSEC_SECURE_SESSION_T 	*pSecSession;
+#endif
+
 } PD_ELE_T, *TRDP_PUB_PT, *TRDP_SUB_PT;
 
 #if MD_SUPPORT
@@ -456,6 +478,11 @@ typedef struct TRDP_SESSION
     MD_ELE_T                *pMDRcvEle;         /**< pointer to received MD element                         */
     MD_ELE_T                *uncompletedTCP[VOS_MAX_SOCKET_CNT];     /**< uncompleted TCP messages buffer   */
 #endif
+#ifdef TRDPSEC
+    TRDPSEC_SECURE_SESSION_T		*pSecQueue;
+    VOS_MUTEX_T             		mutexSecSessQueue;  /**< protect this the communication sessions list            */
+#endif
+
 } TRDP_SESSION_T, *TRDP_SESSION_PT;
 
 

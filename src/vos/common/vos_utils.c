@@ -49,7 +49,8 @@
  * DEFINITIONS
  */
 
-#define NO_OF_ERROR_STRINGS  52u
+/* TODO: number of error strings */
+#define NO_OF_ERROR_STRINGS  55u
 
 /***********************************************************************************************************************
  * GLOBALS
@@ -251,6 +252,9 @@ const CHAR8         *cErrStrings[NO_OF_ERROR_STRINGS] PROGMEM =
     "TRDP_XML_PARSER_ERR (error while parsing XML file)",               /**< Returned by the tau_xml subsystem        */
     "TRDP_INUSE_ERR (Resource is in use)",                              /**< Resource is still in use                 */
     "TRDP_MARSHALLING_ERR (Mismatch between source and dataset size)",  /**< Source size exceeded, dataset mismatch   */
+	"TRDP_SEC_KEY_ERR (Kryptographic Key could not be generated)",		/**< Key generation error					  */
+	"TRDP_SEC_NOSESSION_ERR (No corrsponding secure session found)",	/**< No such secure session					  */
+	"TRDP_SEC_KEY_SEND_ERR (The own public key could not be sent)",  	/**< Generated public key could not be sent	  */
     "TRDP_UNKNOWN_ERR (Unspecified error)"                              /**< Unspecified error                        */
 };
 #endif
