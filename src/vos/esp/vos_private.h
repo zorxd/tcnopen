@@ -17,6 +17,7 @@
  /*
  * $Id$
  *
+ *     AHW 2023-12-21: TRDP version 3.0.0.0 generated based on trunk 2427
  *      BL 2018-06-20: Ticket #184: Building with VS 2015: WIN64 and Windows threads (SOCKET instead of INT32)
  *
  */
@@ -44,8 +45,8 @@ extern "C" {
 
 /* The VOS version can be predefined as CFLAG   */
 #ifndef VOS_VERSION
-#define VOS_VERSION            2u
-#define VOS_RELEASE            2u /* 399: Socket abstraction added, vos_select(), highDesc is NOT anymore incremented in call */
+#define VOS_VERSION            3u /* #399: Socket abstraction added, vos_select(), highDesc is NOT anymore incremented in call */
+#define VOS_RELEASE            0u
 #define VOS_UPDATE             0u
 #define VOS_EVOLUTION          0u
 #endif
