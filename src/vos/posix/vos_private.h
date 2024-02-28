@@ -17,7 +17,6 @@
  /*
  * $Id$
  *
- *     AHW 2023-12-21: TRDP version 3.0.0.0 generated based on trunk 2427
  *      PL 2023-07-13: Ticket #435 Cleanup VLAN and TSN for options for Linux systems
  *      PL 2023-04-19: Ticket #430 PC Lint Analysis and Fix
  *      AM 2022-12-01: Ticket #399 Abstract socket type (VOS_SOCK_T, TRDP_SOCK_T) introduced
@@ -51,8 +50,8 @@ extern "C" {
 
 /* The VOS version can be predefined as CFLAG   */
 #ifndef VOS_VERSION
-#define VOS_VERSION            2u
-#define VOS_RELEASE            2u /* 399: Socket abstraction added, vos_select(), highDesc is NOT anymore incremented in call */
+#define VOS_VERSION            3u
+#define VOS_RELEASE            0u /* 399: Socket abstraction added, vos_select(), highDesc is NOT anymore incremented in call */
 #define VOS_UPDATE             0u
 #define VOS_EVOLUTION          0u
 #endif
