@@ -799,7 +799,7 @@ EXT_DECL TRDP_ERR_T tlm_readdListener (
  *  @retval         TRDP_NO_SESSION_ERR no such session
  *  @retval         TRDP_NOINIT_ERR     handle invalid
  */
-EXT_DECL TRDP_ERR_T tlm_reply (                    /* 261 send params removed */
+EXT_DECL TRDP_ERR_T tlm_reply (                    /* #261 send params removed */
     TRDP_APP_SESSION_T      appHandle,
     const TRDP_UUID_T       *pSessionId,
     UINT32                  comId,
@@ -820,7 +820,7 @@ EXT_DECL TRDP_ERR_T tlm_reply (                    /* 261 send params removed */
     {
         return TRDP_PARAM_ERR;
     }
-    return trdp_mdReply(TRDP_MSG_MP,                              /* 261 send params removed */
+    return trdp_mdReply(TRDP_MSG_MP,                              /* #261 send params removed */
                         appHandle,
                         (UINT8 *)pSessionId,
                         comId,
