@@ -50,6 +50,8 @@ extern "C" {
 
 #define TAU_MAX_NO_CACHE_ENTRY      50u
 
+#define TRDP_DNR_STANDARD_DNS_PORT  53u
+
 /***********************************************************************************************************************
  * TYPEDEFS
  */

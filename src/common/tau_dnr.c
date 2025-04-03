@@ -1090,11 +1090,11 @@ EXT_DECL TRDP_ERR_T tau_initDnr (
     /* Set default ports */
     if (dnsOptions == TRDP_DNR_STANDARD_DNS)
     {
-        pDNR->dnsPort   = (dnsPort == 0u) ? 53u : dnsPort;
+        pDNR->dnsPort   = (dnsPort == 0u) ? TRDP_DNR_STANDARD_DNS_PORT : dnsPort;
     }
     else
     {
-        pDNR->dnsPort   = (dnsPort == 0u) ? 17225u : dnsPort;
+        pDNR->dnsPort   = (dnsPort == 0u) ? TRDP_MD_UDP_PORT : dnsPort;
     }
 
     pDNR->useTCN_DNS = dnsOptions;
