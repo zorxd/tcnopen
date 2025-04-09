@@ -17,6 +17,7 @@
  /*
  * $Id$
  *
+ *     AHW 2025-04-09: Ticket #464 Remove compiler switch TSN_SUPPORT and related dead code
  *     CWE 2023-03-28: Ticket #342 Updating TSN / VLAN / RT-thread code
  *      AM 2022-12-01: Ticket #399 Abstract socket type (VOS_SOCK_T, TRDP_SOCK_T) introduced, vos_select function is not anymore called with '+1'
  *     AHW 2021-05-06: Ticket #322 Subscriber multicast message routing in multi-home device
@@ -32,11 +33,6 @@
 #ifndef ESP32
 #error \
     "You are trying to compile the ESP32 implementation of vos_sock.c - either define ESP32 or exclude this file!"
-#endif
-
-#ifdef TSN_SUPPORT
-#warning \
-    "To build a TSN capable TRDP library another vos_sock implementation is necessary. Sorry!"
 #endif
 
 /***********************************************************************************************************************

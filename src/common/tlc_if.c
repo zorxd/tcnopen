@@ -391,11 +391,7 @@ EXT_DECL TRDP_ERR_T tlc_init (
 #else
             vos_printLogStr(VOS_LOG_INFO, "MD_SUPPORT:  disabled\n");
 #endif
-#if defined(TSN_SUPPORT)
-            vos_printLogStr(VOS_LOG_INFO, "TSN_SUPPORT: enabled\n");
-#else
-            vos_printLogStr(VOS_LOG_INFO, "TSN_SUPPORT: disabled\n");
-#endif
+
 #if defined(SOA_SUPPORT)
             vos_printLogStr(VOS_LOG_INFO, "SOA_SUPPORT: enabled\n");
 #else

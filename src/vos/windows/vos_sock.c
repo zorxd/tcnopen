@@ -18,6 +18,8 @@
 /*
 * $Id$
 *
+*     AHW 2025-04-09: Ticket #464 Remove compiler switch TSN_SUPPORT and related dead code
+*     AHW 2024-05-08: Ticket #451 Missing nullpointer check in tlc_openSession/vlanId and type missing in statistics
 *      PL 2023-10-05: Ticket #435 Cleanup VLAN and TSN options at different places
 *      PL 2023-07-13: Ticket #435 Cleanup VLAN and TSN for options for Linux systems
 *     CWE 2023-03-28: Ticket #342 Updating TSN / VLAN / RT-thread code
@@ -44,10 +46,6 @@
 #endif
 
 #include "vos_types.h"
-
-#ifdef TSN_SUPPORT
-#pragma WARNING("*** To build a TSN capable TRDP library the vos_sock implementation has to be extended! ***")
-#endif
 
 /***********************************************************************************************************************
  * INCLUDES

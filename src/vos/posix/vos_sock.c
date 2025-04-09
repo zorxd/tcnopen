@@ -17,6 +17,7 @@
 /*
 * $Id$
 *
+*     AHW 2025-04-09: Ticket #464 Remove compiler switch TSN_SUPPORT and related dead code
 *      RD 2024-05-29: Ticket #454 QNX vos_getMacAddress implementation
 *     AHW 2024-03-22: Ticket #445 Fix and improve QNX support
 *      PL 2023-10-11: Lint warnings
