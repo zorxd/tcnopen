@@ -17,6 +17,7 @@
  /*
  * $Id$
  *
+ *     AHW 2025-04-10: Ticket #466 Potential null pointere dereference
  *     AHW 2024-06-21: Ticket #461 statistics retrieval of joined mc addresses flags TRDP_ERR_MEN too early
  *     AHW 2024-05-08: Ticket #451 Missing nullpointer check in tlc_openSession/vlanId and type missing in statistics
  *      SB 2021-08.09: Ticket #375 Replaced parameters of vos_memCount to prevent alignment issues
@@ -439,15 +440,15 @@ EXT_DECL TRDP_ERR_T tlc_getJoinStatistics (
     UINT16      lIndex, llIndex;
     UINT16      numJoin = 0;
 
+    if (pNumJoin == NULL)                   /* #466 */
+    {
+        return TRDP_PARAM_ERR;
+    }
+
     if (!trdp_isValidSession(appHandle))
     {
         *pNumJoin = 0;
         return TRDP_NOINIT_ERR;
-    }
-
-    if (pNumJoin == NULL)
-    {
-        return TRDP_PARAM_ERR;
     }
 
     if (*pNumJoin == 0)
