@@ -118,8 +118,6 @@ extern "C" {
 /* for example: IP-Addr 10.0.8.35 translated to (10 * << 24) + (0 * << 16) + (8 << 8) + 35 */
 typedef VOS_IP4_ADDR_T TRDP_IP_ADDR_T;
 
-typedef CHAR8 TTRDP_LABEL_T[TRDP_MAX_LABEL_LEN + 1];
-
 typedef CHAR8 TRDP_EXTRA_LABEL_T[TRDP_EXTRA_LABEL_LEN + 1];
 
 typedef CHAR8 TRDP_LABEL_T[TRDP_MAX_LABEL_LEN];         /* #474 all labels are \0 terminated! */
